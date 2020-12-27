@@ -1,0 +1,18 @@
+version: "3.6"
+services:
+  environment:
+    container_name: kangaroo
+    build:
+      dockerfile: Dockerfile
+      context: ../
+    ports: []
+    working_dir: /home/envcontainer/kangaroo
+    env_file:
+    - $PWD/.envcontainer/compose/env/.variables
+    volumes:
+    - type: bind
+      source: ../../
+      target: /home/envcontainer/kangaroo
+    privileged: true
+    stdin_open: true
+    tty: true

@@ -6,6 +6,7 @@ import (
 	"github.com/erickmaria/kangaroo/core/pkg/handler"
 	"github.com/erickmaria/kangaroo/core/pkg/logger"
 	"github.com/erickmaria/kangaroo/core/pkg/profile"
+	"github.com/erickmaria/kangaroo/core/pkg/server"
 )
 
 type Application struct {
@@ -38,4 +39,6 @@ func main() {
 	}
 
 	fmt.Println(app)
+
+	server.NewServer(":9999").Listen()
 }

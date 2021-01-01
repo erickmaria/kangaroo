@@ -8,7 +8,7 @@ ENV EVANS_VERSION=0.9.1
 ######################
 RUN apt-get update && \
     apt-get install \
-    git
+    git \
     curl \
     unzip \
     -y

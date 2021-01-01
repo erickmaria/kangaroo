@@ -1,0 +1,11 @@
+app:
+  addr: localhost
+  port: 9999
+  internval: 5s
+  info:
+    name: Test
+    version: v0.0.1-alpha
+  ips:
+    - 10.0.0.1
+    - 10.0.0.2
+    - 10.0.0.3

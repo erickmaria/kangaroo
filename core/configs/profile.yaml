@@ -1,0 +1,9 @@
+configs:
+  path: configs/profiles
+  file: application-#{target}#.yaml
+  target:
+    - development {default}
+    - production
+    - test
+
+

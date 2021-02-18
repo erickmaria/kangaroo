@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+var moduleName string
+
 type Level string
 
 var (
@@ -35,24 +37,6 @@ type Stacktace struct {
 	Stack  string
 }
 
-type Formatter struct {
-	Time      string
-	Module    string
-	Level     Level
-	Message   string
-	Stacktace Stacktace
-}
-
-func (frmttr *Formatter) String() string {
-
-	data, err := json.Marshal(frmttr)
-	if err != nil {
-		fmt.Println("error to marshal log to json.")
-	}
-
-	return fmt.Sprintf("time=\"%s\" [%s] level=\"%s\" Message=\"%s\" %s", frmttr.Time, frmttr.Module, frmttr.Level, frmttr.Message, data)
-}
-
 func Log(level Level, message string) {
 
 	// get caller runtime information
@@ -73,10 +57,11 @@ func Log(level Level, message string) {
 	}
 
 	frmttr := Formatter{
-		Time:    time.Now().Format("2006-01-02 15:04:05.000Z"),
-		Module:  "Test",
-		Level:   level,
-		Message: message,
+		Time:      time.Now().Format("2006-01-02 15:04:05.000Z"),
+		Module:    fmt.Sprintf("%v", moduleName),
+		Level:     level,
+		Message:   message,
+		Stacktace: st,
 	}
 
 	switch level {
@@ -93,4 +78,26 @@ func Log(level Level, message string) {
 	fmt.Println(frmttr.String())
 	fmt.Print(string(colorReset))
 
+}
+
+func SetModule(name string) {
+	moduleName = name
+}
+
+type Formatter struct {
+	Time      string
+	Module    string
+	Level     Level
+	Message   string
+	Stacktace Stacktace
+}
+
+func (frmttr *Formatter) String() string {
+
+	data, err := json.Marshal(frmttr)
+	if err != nil {
+		fmt.Println("error to marshal log to json.")
+	}
+
+	return fmt.Sprintf("time=\"%s\" [%v] level=\"%s\" Message=\"%s\" %s", frmttr.Time, frmttr.Module, frmttr.Level, frmttr.Message, data)
 }

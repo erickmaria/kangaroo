@@ -9,7 +9,7 @@ var (
 	profileFile string = "profile.yaml"
 )
 
-func Init(application interface{}, profilesPath string, envPrefix string) error {
+func Init(properties interface{}, profilesPath string, envPrefix string) error {
 
 	var err error
 
@@ -34,21 +34,32 @@ func Init(application interface{}, profilesPath string, envPrefix string) error 
 		return selectProfileError
 	}
 
-	// Application configs
+	// properties configs
 
-	applicationFile := getProfileApplication(profile, active)
+	propertiesFile := getProfileProperties(profile, active)
 
-	err = utils.CheckFileExist(applicationFile)
+	err = utils.CheckFileExist(propertiesFile)
 	if handler.Validate(err) {
 		return err
 	}
 
-	err = utils.YamlUnmarshal(application, applicationFile)
+	// err = utils.YamlUnmarshal(properties, propertiesFile)
+	// if handler.Validate(err) {
+	// 	return err
+	// }
+
+	// err = StructSyncEnv(properties, envPrefix)
+	// if handler.Validate(err) {
+	// 	return err
+	// }
+
+	var ppt interface{}
+	err = utils.YamlUnmarshal(&ppt, propertiesFile)
 	if handler.Validate(err) {
 		return err
 	}
 
-	err = SyncEnv(application, envPrefix)
+	err = MapSyncEnv(ppt, envPrefix)
 	if handler.Validate(err) {
 		return err
 	}

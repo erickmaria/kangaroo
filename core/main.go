@@ -1,11 +1,6 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/erickmaria/kangaroo/core/pkg/handler"
-	"github.com/erickmaria/kangaroo/core/pkg/logger"
-	"github.com/erickmaria/kangaroo/core/pkg/profile"
 	"github.com/erickmaria/kangaroo/core/pkg/server"
 )
 
@@ -26,19 +21,16 @@ type Application struct {
 
 func main() {
 
-	logger.Log(logger.INFO, "this is a log info exemple")
-	logger.Log(logger.WARN, "this is a log warn exemple")
-	logger.Log(logger.ERROR, "this is a log error exemple")
-
 	var app Application
+	server.NewKangarooServer(":9999").
+		SetProperties(&app, "configs/", "").
+		SetLoggerModule("Core")
 
-	err := profile.Init(&app, "configs/", "")
+	// logger.Log(logger.INFO, "this is a log info exemple")
+	// logger.Log(logger.WARN, "this is a log warn exemple")
+	// logger.Log(logger.ERROR, "this is a log error exemple")
 
-	if handler.Validate(err) {
-		panic(err)
-	}
+	// fmt.Println(profile.GetProperties("app.i"))
 
-	fmt.Println(app)
-
-	server.NewServer(":9999").Listen()
+	// svr.Listen()
 }

@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+
+	"github.com/erickmaria/kangaroo/core/pkg/profile"
 	"github.com/erickmaria/kangaroo/core/pkg/server"
 )
 
@@ -30,7 +33,9 @@ func main() {
 	// logger.Log(logger.WARN, "this is a log warn exemple")
 	// logger.Log(logger.ERROR, "this is a log error exemple")
 
-	// fmt.Println(profile.GetProperties("app.i"))
+	fmt.Println()
+	fmt.Println(profile.GetProperties(""))
+	fmt.Println(app)
 
 	// svr.Listen()
 }

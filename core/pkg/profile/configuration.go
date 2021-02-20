@@ -43,15 +43,19 @@ func Init(properties interface{}, profilesPath string, envPrefix string) error {
 		return err
 	}
 
-	// err = utils.YamlUnmarshal(properties, propertiesFile)
-	// if handler.Validate(err) {
-	// 	return err
-	// }
+	if properties != nil {
+		err = utils.YamlUnmarshal(properties, propertiesFile)
+		if handler.Validate(err) {
+			return err
+		}
 
-	// err = StructSyncEnv(properties, envPrefix)
-	// if handler.Validate(err) {
-	// 	return err
-	// }
+		err = StructSyncEnv(properties, envPrefix)
+		if handler.Validate(err) {
+			return err
+		}
+
+		return nil
+	}
 
 	var ppt interface{}
 	err = utils.YamlUnmarshal(&ppt, propertiesFile)

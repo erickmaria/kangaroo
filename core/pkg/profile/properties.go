@@ -16,7 +16,6 @@ var properties = make(map[string]interface{})
 
 func MapSyncEnv(in interface{}, envPrefix string) error {
 
-	// myMap := in.(map[interface{}]interface{})
 	var envPrefixSave string = envPrefix
 	var prop, env string
 
@@ -24,48 +23,32 @@ func MapSyncEnv(in interface{}, envPrefix string) error {
 
 	for _, key := range val.MapKeys() {
 
-		val := val.MapIndex(key)
-		// fmt.Println(val)
+		skey := fmt.Sprint(key)
+		value := val.MapIndex(key)
 
-		envPrefix = envPrefix + fmt.Sprint(key) + "_"
+		envPrefix = envPrefix + skey + "_"
 		env = strings.ToUpper(envPrefix[:len(envPrefix)-1])
-		prop = strings.ReplaceAll(strings.ToLower(env), "_", ".")
 
-		properties[prop] = val.Interface()
-		typ := reflect.TypeOf(properties[prop])
-
-		fmt.Printf("key: %v | value: %v | env : %s\n", prop, val, env)
+		typ := reflect.TypeOf(value.Interface())
 
 		if typ.Kind() == reflect.Map {
-			MapSyncEnv(val.Interface(), envPrefix)
+
+			inter := value.Interface()
+			MapSyncEnv(inter, envPrefix)
 			envPrefix = envPrefixSave
 			continue
 		}
 
+		prop = strings.ReplaceAll(strings.ToLower(env), "_", ".")
+		properties[prop] = value.Interface()
+
 		getEnv := os.Getenv(env)
 
 		if len(getEnv) > 0 {
-
-			// fmt.Println(typ)
-			// fmt.Println(val.Kind())
-
-			// fmt.Println(env)
-			// fmt.Println(getEnv)
-			// fmt.Println(reflect.ValueOf(val.Interface()).CanSet())
-
-			// val.SetMapIndex(key, val)
-
-			// err := envSync(reflect.ValueOf(val.Interface()), getEnv)
-			// fmt.Println(err)
-			// if handler.Validate(err) {
-			// 	return err
-			// }
-
-			// fmt.Println(val)
+			properties[prop] = reflect.ValueOf(getEnv).Interface()
 		}
 
 		envPrefix = envPrefixSave
-
 	}
 
 	return nil
@@ -107,7 +90,7 @@ func StructSyncEnv(in interface{}, envPrefix string) error {
 				}
 			}
 
-			properties[strProp] = valueOf.Field(i)
+			properties[strProp] = valueOf.Field(i).Interface()
 		}
 
 		envPrefix = envPrefixSave
@@ -117,8 +100,6 @@ func StructSyncEnv(in interface{}, envPrefix string) error {
 }
 
 func envSync(valueOf reflect.Value, getEnv string) error {
-
-	fmt.Println(valueOf.CanSet())
 
 	switch valueOf.Kind() {
 	case reflect.String:
